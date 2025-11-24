@@ -17,6 +17,7 @@ dist/
 
 # Data files (CSV, Excel, etc.)
 *.csv
+!FinVizData.csv
 *.xlsx
 *.xls
 *.numbers
