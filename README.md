@@ -1,6 +1,6 @@
-# Financial Analysis Tools
+# Daily Financial Screener
 
-A collection of Python tools for stock screening, candlestick pattern detection, and technical analysis.
+Production-ready stock screening tool for automated FinViz data collection.
 
 ## Features
 
@@ -8,44 +8,57 @@ A collection of Python tools for stock screening, candlestick pattern detection,
 - Scrapes stock data from FinViz based on custom filters
 - Exports data to CSV with timestamps
 - Configurable screening criteria for market cap, volume, and performance
-
-### 📈 Candlestick Pattern Analysis (`daily_finder.ipynb`)
-- Detects bullish and bullish engulfing patterns
-- Analyzes historical price data using yfinance
-- Generates pattern statistics over configurable time periods
-- Exports merged data with pattern signals
-
-### 📉 Technical Analysis Notebooks
-- `candlestick.ipynb` - Candlestick chart visualization
-- `engulfing.ipynb` - Engulfing pattern analysis
-- `momentum.ipynb` - Momentum indicator analysis
+- Automatic pagination handling
+- Built-in rate limiting and error handling
 
 ## Requirements
 
 ```bash
-pip install pandas requests beautifulsoup4 yfinance plotly lxml
+pip install pandas requests beautifulsoup4 lxml
 ```
 
 ## Usage
 
-### Stock Screener
+### Running the Screener
+
 ```bash
 python stock_screener.py
 ```
 
-### Pattern Detection
-Open `daily_finder.ipynb` in Jupyter and run the cells sequentially to:
-1. Load FinViz screener data
-2. Download historical price data for each ticker
-3. Detect engulfing patterns
-4. Export results with pattern signals
+The script will:
+1. Connect to FinViz with your configured filters
+2. Scrape all pages of results
+3. Export to `FinVizData.csv` with timestamp
+
+### Configuration
+
+Edit the `url` variable in `main()` to customize your screening criteria:
+
+```python
+url = "https://finviz.com/screener.ashx?v=121&f=cap_smallover,sh_relvol_o2,ta_perf_d5o&ft=4&o=-marketcap"
+```
+
+Current filters:
+- Market cap: Small cap and above
+- Relative volume: Over 2x
+- Performance: Up 5%+ today
+- Sorted by: Market cap (descending)
 
 ## Output
 
-- `FinVizData.csv` - Raw screener results
-- `FinVizData_with_patterns.csv` - Enriched data with pattern signals and statistics
+`FinVizData.csv` - CSV file containing:
+- Ticker symbols
+- Market cap, P/E ratios, valuations
+- Growth metrics (EPS, Sales)
+- Current price, change, volume
+- Scraped timestamp
+
+## Deployment
+
+This is a production repository. Only deployment-ready code should be committed here.
+
+Development and experimental work should be done in the `dev` directory.
 
 ## License
 
 Personal project - All rights reserved
-
