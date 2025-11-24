@@ -1,4 +1,4 @@
-name: Daily Scraper Screener
+name: Daily Stock Screener
 
 on:
   schedule:
@@ -24,9 +24,11 @@ jobs:
       run: python stock_screener.py
 
     - name: Configure Git
-      run: git config --local user.email "github-actions[bot]@users.noreply.github.com"
-      run: git config --local user.name "github-actions[bot]"
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
 
     - name: Commit and push results
-      run: git add FinVizData.csv
-      run: git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update: Stock data $(date + '%Y-%m-%d %H:%M:%S')" && git push)
+      run: |
+        git add FinVizData.csv
+        git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update: Stock data $(date +'%Y-%m-%d %H:%M:%S')" && git push)

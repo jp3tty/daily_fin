@@ -23,7 +23,7 @@ def append_to_csv(df, csv_file):
         file_exists = os.path.isfile(csv_file) and os.path.getsize(csv_file) > 0
         
         # append to CSV, write header only if file doesn't exist
-        df.to_csv(csv_file, mode='a', header=not file_exists, index=False)
+        df.to_csv(csv_file, mode='w', header=True, index=False)
         
     except Exception as e:
         logging.error(f"Error writing to CSV: {str(e)}")
