@@ -57,6 +57,9 @@ def get_webpage(url, csv_file, delay=1):
         num_pages = get_total_pages(soup)
         logging.info(f"Found {num_pages} pages to scrape")
 
+        # collect all data before writing
+        all_data = []
+        
         ticker_number = 1
         for page in range(num_pages):
             try:
@@ -77,8 +80,8 @@ def get_webpage(url, csv_file, delay=1):
                 table_html = StringIO(str(table))
                 pd_data = pd.read_html(table_html)
                 
-                # append data to CSV
-                append_to_csv(pd_data[0], csv_file)
+                # collect data from this page
+                all_data.append(pd_data[0])
                 ticker_number += 20
 
                 # add delay between requests to avoid rate limiting
@@ -87,6 +90,14 @@ def get_webpage(url, csv_file, delay=1):
             except Exception as e:
                 logging.error(f"Error processing page {page + 1}: {str(e)}")
                 continue
+
+        # combine all data and write once
+        if all_data:
+            combined_df = pd.concat(all_data, ignore_index=True)
+            append_to_csv(combined_df, csv_file)
+            logging.info(f"Wrote {len(combined_df)} records to {csv_file}")
+        else:
+            logging.warning("No data collected to write")
 
     except requests.exceptions.RequestException as e:
         logging.error(f"Network error: {str(e)}")
