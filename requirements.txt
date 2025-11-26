@@ -1,0 +1,13 @@
+# Python dependencies for daily_fin stock analysis
+# Stock screener dependencies
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+lxml>=5.0.0
+
+# Data analysis dependencies
+pandas>=2.2.0
+numpy>=1.26.0
+
+# Financial data dependencies
+yfinance>=0.2.40
+

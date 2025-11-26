@@ -1,4 +1,4 @@
-name: Daily Stock Screener
+name: Daily Stock Analysis
 
 on:
   schedule:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  scrape:
+  analyze:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
@@ -18,15 +18,18 @@ jobs:
         python-version: '3.11'
 
     - name: Install dependencies
-      run: pip install pandas requests beautifulsoup4 lxml
+      run: pip install -r requirements.txt
+
+    - name: Create saved_data directory
+      run: mkdir -p saved_data
 
     - name: Run stock screener
       run: python stock_screener.py
 
-    - name: Run engulfing pattern indicator
+    - name: Run engulfing indicator analysis
       run: python engulfing_indicator.py
 
-    - name: Run momentum indicator
+    - name: Run momentum indicator analysis
       run: python momentum_indicator.py
 
     - name: Configure Git
@@ -36,5 +39,5 @@ jobs:
 
     - name: Commit and push results
       run: |
-        git add FinVizData.csv
-        git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update: Stock data $(date +'%Y-%m-%d %H:%M:%S')" && git push)
+        git add saved_data/*.csv
+        git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update: Stock analysis $(date +'%Y-%m-%d %H:%M:%S')" && git push)
