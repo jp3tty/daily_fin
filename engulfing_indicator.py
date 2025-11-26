@@ -138,108 +138,108 @@ merged_df = df.merge(
 
 # Save to CSV
 merged_df.to_csv('saved_data/FinVizData_with_engulfing_patterns.csv', index=False)
-print("✅ Merged data saved to 'FinVizData_with_engulfing_patterns.csv'")
+# print("✅ Merged data saved to 'FinVizData_with_engulfing_patterns.csv'")
 
-# merged_df.head()
+# # merged_df.head()
 
-# ============================================================
-# SUMMARY STATISTICS
-# ============================================================
+# # ============================================================
+# # SUMMARY STATISTICS
+# # ============================================================
 
-print("\n" + "="*60)
-print("PATTERN ANALYSIS SUMMARY")
-print("="*60)
+# print("\n" + "="*60)
+# print("PATTERN ANALYSIS SUMMARY")
+# print("="*60)
 
-# Overall counts
-total_analyzed = len(pattern_df)
-bearish_latest = len(pattern_df[pattern_df['Latest_Signal'] == 1])
-bullish_latest = len(pattern_df[pattern_df['Latest_Signal'] == 2])
-neutral_latest = len(pattern_df[pattern_df['Latest_Signal'] == 0])
+# # Overall counts
+# total_analyzed = len(pattern_df)
+# bearish_latest = len(pattern_df[pattern_df['Latest_Signal'] == 1])
+# bullish_latest = len(pattern_df[pattern_df['Latest_Signal'] == 2])
+# neutral_latest = len(pattern_df[pattern_df['Latest_Signal'] == 0])
 
-print(f"\nTotal Tickers Analyzed: {total_analyzed}")
-print(f"Latest Signal Distribution:")
-print(f"  🔴 Bearish Engulfing: {bearish_latest} ({bearish_latest/total_analyzed*100:.1f}%)")
-print(f"  🟢 Bullish Engulfing: {bullish_latest} ({bullish_latest/total_analyzed*100:.1f}%)")
-print(f"  ⚪ Neutral: {neutral_latest} ({neutral_latest/total_analyzed*100:.1f}%)")
+# print(f"\nTotal Tickers Analyzed: {total_analyzed}")
+# print(f"Latest Signal Distribution:")
+# print(f"  🔴 Bearish Engulfing: {bearish_latest} ({bearish_latest/total_analyzed*100:.1f}%)")
+# print(f"  🟢 Bullish Engulfing: {bullish_latest} ({bullish_latest/total_analyzed*100:.1f}%)")
+# print(f"  ⚪ Neutral: {neutral_latest} ({neutral_latest/total_analyzed*100:.1f}%)")
 
-# 90-day pattern statistics
-avg_bearish_90d = pattern_df['Bearish_Count_90d'].mean()
-avg_bullish_90d = pattern_df['Bullish_Count_90d'].mean()
-total_bearish_90d = pattern_df['Bearish_Count_90d'].sum()
-total_bullish_90d = pattern_df['Bullish_Count_90d'].sum()
+# # 90-day pattern statistics
+# avg_bearish_90d = pattern_df['Bearish_Count_90d'].mean()
+# avg_bullish_90d = pattern_df['Bullish_Count_90d'].mean()
+# total_bearish_90d = pattern_df['Bearish_Count_90d'].sum()
+# total_bullish_90d = pattern_df['Bullish_Count_90d'].sum()
 
-print(f"\n90-Day Pattern Statistics:")
-print(f"  Total Bearish Patterns: {total_bearish_90d} (avg {avg_bearish_90d:.1f} per ticker)")
-print(f"  Total Bullish Patterns: {total_bullish_90d} (avg {avg_bullish_90d:.1f} per ticker)")
+# print(f"\n90-Day Pattern Statistics:")
+# print(f"  Total Bearish Patterns: {total_bearish_90d} (avg {avg_bearish_90d:.1f} per ticker)")
+# print(f"  Total Bullish Patterns: {total_bullish_90d} (avg {avg_bullish_90d:.1f} per ticker)")
 
-# Price statistics
-avg_price = pattern_df['Latest_Close'].mean()
-median_price = pattern_df['Latest_Close'].median()
-min_price = pattern_df['Latest_Close'].min()
-max_price = pattern_df['Latest_Close'].max()
+# # Price statistics
+# avg_price = pattern_df['Latest_Close'].mean()
+# median_price = pattern_df['Latest_Close'].median()
+# min_price = pattern_df['Latest_Close'].min()
+# max_price = pattern_df['Latest_Close'].max()
 
-print(f"\nPrice Statistics:")
-print(f"  Average Price: ${avg_price:.2f}")
-print(f"  Median Price: ${median_price:.2f}")
-print(f"  Range: ${min_price:.2f} - ${max_price:.2f}")
+# print(f"\nPrice Statistics:")
+# print(f"  Average Price: ${avg_price:.2f}")
+# print(f"  Median Price: ${median_price:.2f}")
+# print(f"  Range: ${min_price:.2f} - ${max_price:.2f}")
 
-# Top patterns
-print(f"\n" + "-"*60)
-print("TOP PATTERN ACTIVITY (90 Days)")
-print("-"*60)
+# # Top patterns
+# print(f"\n" + "-"*60)
+# print("TOP PATTERN ACTIVITY (90 Days)")
+# print("-"*60)
 
-# Most bearish patterns
-most_bearish = pattern_df.nlargest(5, 'Bearish_Count_90d')[['Ticker', 'Bearish_Count_90d', 'Latest_Close']]
-print("\n🔴 Top 5 Tickers with Most Bearish Patterns:")
-print(most_bearish.to_string(index=False))
+# # Most bearish patterns
+# most_bearish = pattern_df.nlargest(5, 'Bearish_Count_90d')[['Ticker', 'Bearish_Count_90d', 'Latest_Close']]
+# print("\n🔴 Top 5 Tickers with Most Bearish Patterns:")
+# print(most_bearish.to_string(index=False))
 
-# Most bullish patterns
-most_bullish = pattern_df.nlargest(5, 'Bullish_Count_90d')[['Ticker', 'Bullish_Count_90d', 'Latest_Close']]
-print("\n🟢 Top 5 Tickers with Most Bullish Patterns:")
-print(most_bullish.to_string(index=False))
+# # Most bullish patterns
+# most_bullish = pattern_df.nlargest(5, 'Bullish_Count_90d')[['Ticker', 'Bullish_Count_90d', 'Latest_Close']]
+# print("\n🟢 Top 5 Tickers with Most Bullish Patterns:")
+# print(most_bullish.to_string(index=False))
 
-# Latest signals
-print(f"\n" + "-"*60)
-print("LATEST ENGULFING PATTERNS")
-print("-"*60)
+# # Latest signals
+# print(f"\n" + "-"*60)
+# print("LATEST ENGULFING PATTERNS")
+# print("-"*60)
 
-bearish_signals = pattern_df[pattern_df['Latest_Signal'] == 1].sort_values('Latest_Date', ascending=False)
-if len(bearish_signals) > 0:
-    print(f"\n🔴 Tickers with BEARISH Engulfing Pattern (most recent):")
-    print(f"Found {len(bearish_signals)} ticker(s)\n")
-    print(bearish_signals[['Ticker', 'Latest_Date', 'Latest_Close', 'Bearish_Count_90d']].to_string(index=False))
-else:
-    print(f"\n🔴 No tickers with bearish engulfing pattern on latest day")
+# bearish_signals = pattern_df[pattern_df['Latest_Signal'] == 1].sort_values('Latest_Date', ascending=False)
+# if len(bearish_signals) > 0:
+#     print(f"\n🔴 Tickers with BEARISH Engulfing Pattern (most recent):")
+#     print(f"Found {len(bearish_signals)} ticker(s)\n")
+#     print(bearish_signals[['Ticker', 'Latest_Date', 'Latest_Close', 'Bearish_Count_90d']].to_string(index=False))
+# else:
+#     print(f"\n🔴 No tickers with bearish engulfing pattern on latest day")
 
-bullish_signals = pattern_df[pattern_df['Latest_Signal'] == 2].sort_values('Latest_Date', ascending=False)
-if len(bullish_signals) > 0:
-    print(f"\n🟢 Tickers with BULLISH Engulfing Pattern (most recent):")
-    print(f"Found {len(bullish_signals)} ticker(s)\n")
-    print(bullish_signals[['Ticker', 'Latest_Date', 'Latest_Close', 'Bullish_Count_90d']].to_string(index=False))
-else:
-    print(f"\n🟢 No tickers with bullish engulfing pattern on latest day")
+# bullish_signals = pattern_df[pattern_df['Latest_Signal'] == 2].sort_values('Latest_Date', ascending=False)
+# if len(bullish_signals) > 0:
+#     print(f"\n🟢 Tickers with BULLISH Engulfing Pattern (most recent):")
+#     print(f"Found {len(bullish_signals)} ticker(s)\n")
+#     print(bullish_signals[['Ticker', 'Latest_Date', 'Latest_Close', 'Bullish_Count_90d']].to_string(index=False))
+# else:
+#     print(f"\n🟢 No tickers with bullish engulfing pattern on latest day")
 
-# Price-based insights
-print(f"\n" + "-"*60)
-print("PRICE-BASED INSIGHTS")
-print("-"*60)
+# # Price-based insights
+# print(f"\n" + "-"*60)
+# print("PRICE-BASED INSIGHTS")
+# print("-"*60)
 
-# Low-priced stocks with patterns
-low_price_threshold = 10
-low_priced = pattern_df[pattern_df['Latest_Close'] < low_price_threshold].sort_values('Latest_Close')
-print(f"\nLow-Priced Stocks (< ${low_price_threshold}):")
-print(f"Found {len(low_priced)} ticker(s)")
-if len(low_priced) > 0:
-    print(low_priced[['Ticker', 'Latest_Close', 'Bearish_Count_90d', 'Bullish_Count_90d']].head(10).to_string(index=False))
+# # Low-priced stocks with patterns
+# low_price_threshold = 10
+# low_priced = pattern_df[pattern_df['Latest_Close'] < low_price_threshold].sort_values('Latest_Close')
+# print(f"\nLow-Priced Stocks (< ${low_price_threshold}):")
+# print(f"Found {len(low_priced)} ticker(s)")
+# if len(low_priced) > 0:
+#     print(low_priced[['Ticker', 'Latest_Close', 'Bearish_Count_90d', 'Bullish_Count_90d']].head(10).to_string(index=False))
 
-# High-priced stocks with patterns
-high_price_threshold = 100
-high_priced = pattern_df[pattern_df['Latest_Close'] > high_price_threshold].sort_values('Latest_Close', ascending=False)
-print(f"\nHigh-Priced Stocks (> ${high_price_threshold}):")
-print(f"Found {len(high_priced)} ticker(s)")
-if len(high_priced) > 0:
-    print(high_priced[['Ticker', 'Latest_Close', 'Bearish_Count_90d', 'Bullish_Count_90d']].head(10).to_string(index=False))
+# # High-priced stocks with patterns
+# high_price_threshold = 100
+# high_priced = pattern_df[pattern_df['Latest_Close'] > high_price_threshold].sort_values('Latest_Close', ascending=False)
+# print(f"\nHigh-Priced Stocks (> ${high_price_threshold}):")
+# print(f"Found {len(high_priced)} ticker(s)")
+# if len(high_priced) > 0:
+#     print(high_priced[['Ticker', 'Latest_Close', 'Bearish_Count_90d', 'Bullish_Count_90d']].head(10).to_string(index=False))
 
-print(f"\n" + "="*60)
-print("Analysis complete! Check 'FinVizData_with_engulfing_patterns.csv' for full results.")
-print("="*60 + "\n")
+# print(f"\n" + "="*60)
+# print("Analysis complete! Check 'FinVizData_with_engulfing_patterns.csv' for full results.")
+# print("="*60 + "\n")
