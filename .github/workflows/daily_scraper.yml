@@ -29,6 +29,9 @@ jobs:
     - name: Run engulfing indicator analysis
       run: python engulfing_indicator.py
 
+    - name: Pause for rate limiting
+      run: sleep 600
+
     - name: Run momentum indicator analysis
       run: python momentum_indicator.py
 

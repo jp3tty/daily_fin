@@ -151,7 +151,7 @@ for i, symbol in enumerate(symbol_list, 1):
     result = analyze_ticker_momentum(symbol, days=90)
     if result:
         results.append(result)
-    time.sleep(0.1) # Rate limit
+    time.sleep(0.5) # Rate limit
 
 print(f"\nCompleted analysis of {len(results)} tickers!")
 

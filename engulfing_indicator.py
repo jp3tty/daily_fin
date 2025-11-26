@@ -122,7 +122,7 @@ for i, symbol in enumerate(symbol_list, 1):
         })
     # Small delay to avoid rate limiting
     import time
-    time.sleep(0.1)
+    time.sleep(.5)
 
 print(f"\nCompleted analysis of {len(results)} tickers!")
 
