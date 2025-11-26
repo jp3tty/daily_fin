@@ -110,7 +110,7 @@ def main():
     """Main function to run the scraper"""
     try:
         # configuration
-        csv_file = "FinVizData.csv"
+        csv_file = "saved_data/FinVizData.csv"
         url = "https://finviz.com/screener.ashx?v=121&f=cap_smallover,sh_relvol_o2,ta_perf_d5o&ft=4&o=-marketcap"
 
         logging.info(f"Starting scraper for {url}")
