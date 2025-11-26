@@ -250,10 +250,6 @@ This is a **production repository**. Development and experimental work should be
 
 Personal project - All rights reserved
 
-## 🤝 Contributing
-
-This is a personal production repository. Development contributions should be made to the `dev/` directory first.
-
 ---
 
 **Last Updated:** 2025-11-26  
