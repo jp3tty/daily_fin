@@ -24,7 +24,7 @@ jobs:
       run: python stock_screener.py
 
     - name: Run engulfing pattern indicator
-      run: python engulfing_pattern_indicator.py
+      run: python engulfing_indicator.py
 
     - name: Run momentum indicator
       run: python momentum_indicator.py
