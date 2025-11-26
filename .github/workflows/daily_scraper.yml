@@ -2,7 +2,7 @@ name: Daily Stock Screener
 
 on:
   schedule:
-    - cron: '30 21 * * 1-5'
+    - cron: '30 21 * * 1-5' # At 21:30 UTC (4:30 PM EST) every weekday
   workflow_dispatch:
 
 jobs:
@@ -22,6 +22,12 @@ jobs:
 
     - name: Run stock screener
       run: python stock_screener.py
+
+    - name: Run engulfing pattern indicator
+      run: python engulfing_pattern_indicator.py
+
+    - name: Run momentum indicator
+      run: python momentum_indicator.py
 
     - name: Configure Git
       run: |
