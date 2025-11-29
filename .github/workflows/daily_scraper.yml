@@ -26,6 +26,9 @@ jobs:
     - name: Run stock screener
       run: python stock_screener.py
 
+    - name: Run pull stock candles
+      run: python pull_stock_candles.py
+
     - name: Run engulfing indicator analysis
       run: python engulfing_indicator.py
 

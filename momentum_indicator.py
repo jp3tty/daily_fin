@@ -1,11 +1,23 @@
 import pandas as pd 
 import numpy as np
-import yfinance as yf
-from datetime import datetime, timedelta 
-import time
 
-df = pd.read_csv('saved_data/FinVizData.csv')
-symbol_list = df['Ticker'].tolist()
+# Load FinViz data for ticker list and metadata
+finviz_df = pd.read_csv('saved_data/FinVizData.csv')
+symbol_list = finviz_df['Ticker'].tolist()
+
+# Load pre-downloaded stock candle data
+print("Loading stock candle data from CSV...")
+try:
+    stock_data = pd.read_csv('saved_data/stock_candles_90d.csv')
+    # Convert Date column to datetime
+    stock_data['Date'] = pd.to_datetime(stock_data['Date'])
+    # Convert column names to lowercase for consistency with existing code
+    stock_data.columns = stock_data.columns.str.lower()
+    print(f"✅ Loaded {len(stock_data)} rows of stock data for {stock_data['ticker'].nunique()} tickers\n")
+except FileNotFoundError:
+    print("❌ Error: saved_data/stock_candles_90d.csv not found!")
+    print("Please run 'pull_stock_candles.py' first to download the data.")
+    exit(1)
 
 # # Get the data for analysis
 # symbol = 'RCL' 
@@ -70,31 +82,26 @@ def identify_momentum_trend(df):
 
     return df
 
-def analyze_ticker_momentum(symbol, days=90): 
+def analyze_ticker_momentum(symbol, stock_data_df): 
     """
-    Download data for a ticker and analyze momentum
+    Analyze ticker momentum using pre-loaded data
+
+    Args:
+        symbol: Stock ticker symbol
+        stock_data_df: DataFrame with all stock candle data
 
     Returns:
         Dictionary with momentum analysis results
     """
     try:
-        # Download data
-        end_date = datetime.now()
-        start_date = end_date - timedelta(days=days)
-
-        ticker_df = yf.download(symbol, start=start_date, end=end_date, 
-                                progress=False, auto_adjust=True)
+        # Filter data for this ticker
+        ticker_df = stock_data_df[stock_data_df['ticker'] == symbol].copy()
 
         if ticker_df.empty or len(ticker_df) < 50: # Need at least 50 days of data
             return None 
 
-        # Reset index and process columns
-        ticker_df.reset_index(inplace=True)
-        if isinstance(ticker_df.columns, pd.MultiIndex):
-            ticker_df.columns = ticker_df.columns.get_level_values(0)
-
-        # Convert to lowercase for consistency
-        ticker_df.columns = ticker_df.columns.str.lower()
+        # Sort by date to ensure proper order
+        ticker_df = ticker_df.sort_values('date').reset_index(drop=True)
 
         # Apply momentum analysis
         ticker_df = identify_momentum_trend(ticker_df)
@@ -148,10 +155,9 @@ print(f"Analyzing {len(symbol_list)} tickers for momentum indicators...")
 results = []
 for i, symbol in enumerate(symbol_list, 1):
     print(f"Processing {i}/{len(symbol_list)}: {symbol}", end='\r')
-    result = analyze_ticker_momentum(symbol, days=90)
+    result = analyze_ticker_momentum(symbol, stock_data)
     if result:
         results.append(result)
-    time.sleep(0.5) # Rate limit
 
 print(f"\nCompleted analysis of {len(results)} tickers!")
 
@@ -160,7 +166,7 @@ momentum_df = pd.DataFrame(results)
 
 
 # Merge with FinViz Data and Export
-merged_df = df.merge(
+merged_df = finviz_df.merge(
     momentum_df[['Ticker', 'RSI', 'Momentum', 'Momentum_Strength_Pct',
                  'Current_Trend', 'Signal_Strength', 'Bullish_Days_30d', 'Bearish_Days_30d']],
     on='Ticker',
@@ -169,54 +175,54 @@ merged_df = df.merge(
 
 # Save to CSV
 merged_df.to_csv('saved_data/FinVizData_with_momentum_indicators.csv', index=False)
-# print("✅ Merged data saved to 'FinVizData_with_momentum_indicators.csv'")
+print("✅ Merged data saved to 'FinVizData_with_momentum_indicators.csv'")
 
 
-# # Summary Statistics
-# print("\n" + "="*60)
-# print("MOMENTUM ANALYSIS SUMMARY")
-# print("="*60)
+# Summary Statistics
+print("\n" + "="*60)
+print("MOMENTUM ANALYSIS SUMMARY")
+print("="*60)
 
-# # Trend distribution
-# trend_counts = momentum_df['Current_Trend'].value_counts()
-# print(f"\nCurrent Trend Distribution:")
-# for trend, count in trend_counts.items():
-#     print(f"  {trend}: {count} ({count/len(momentum_df)*100:.1f}%)")
+# Trend distribution
+trend_counts = momentum_df['Current_Trend'].value_counts()
+print(f"\nCurrent Trend Distribution:")
+for trend, count in trend_counts.items():
+    print(f"  {trend}: {count} ({count/len(momentum_df)*100:.1f}%)")
 
-# # Signal strength
-# strength_counts = momentum_df['Signal_Strength'].value_counts()
-# print(f"\nSignal Strength Distribution:")
-# for strength, count in strength_counts.items():
-#     print(f"  {strength}: {count} ({count/len(momentum_df)*100:.1f}%)")
+# Signal strength
+strength_counts = momentum_df['Signal_Strength'].value_counts()
+print(f"\nSignal Strength Distribution:")
+for strength, count in strength_counts.items():
+    print(f"  {strength}: {count} ({count/len(momentum_df)*100:.1f}%)")
 
-# # RSI statistics
-# print(f"\nRSI Statistics:")
-# print(f"  Average RSI: {momentum_df['RSI'].mean():.2f}")
-# print(f"  Overbought (RSI > 70): {(momentum_df['RSI'] > 70).sum()} tickers")
-# print(f"  Oversold (RSI < 30): {(momentum_df['RSI'] < 30).sum()} tickers")
+# RSI statistics
+print(f"\nRSI Statistics:")
+print(f"  Average RSI: {momentum_df['RSI'].mean():.2f}")
+print(f"  Overbought (RSI > 70): {(momentum_df['RSI'] > 70).sum()} tickers")
+print(f"  Oversold (RSI < 30): {(momentum_df['RSI'] < 30).sum()} tickers")
 
-# # Top momentum stocks
-# print(f"\n" + "-"*60)
-# print("TOP 10 BULLISH MOMENTUM STOCKS")
-# print("-"*60)
-# top_bullish = momentum_df.nlargest(10, 'Momentum_Strength_Pct')[
-#     ['Ticker', 'RSI', 'Momentum_Strength_Pct', 'Current_Trend']
-# ]
-# print(top_bullish.to_string(index=False))
+# Top momentum stocks
+print(f"\n" + "-"*60)
+print("TOP 10 BULLISH MOMENTUM STOCKS")
+print("-"*60)
+top_bullish = momentum_df.nlargest(10, 'Momentum_Strength_Pct')[
+    ['Ticker', 'RSI', 'Momentum_Strength_Pct', 'Current_Trend']
+]
+print(top_bullish.to_string(index=False))
 
-# print(f"\n" + "-"*60)
-# print("TOP 10 BEARISH MOMENTUM STOCKS")
-# print("-"*60)
-# top_bearish = momentum_df.nsmallest(10, 'Momentum_Strength_Pct')[
-#     ['Ticker', 'RSI', 'Momentum_Strength_Pct', 'Current_Trend']
-# ]
-# print(top_bearish.to_string(index=False))
+print(f"\n" + "-"*60)
+print("TOP 10 BEARISH MOMENTUM STOCKS")
+print("-"*60)
+top_bearish = momentum_df.nsmallest(10, 'Momentum_Strength_Pct')[
+    ['Ticker', 'RSI', 'Momentum_Strength_Pct', 'Current_Trend']
+]
+print(top_bearish.to_string(index=False))
 
-# # Strong signals
-# strong_bulls = momentum_df[momentum_df['Signal_Strength'] == 'Strong_Bullish']
-# strong_bears = momentum_df[momentum_df['Signal_Strength'] == 'Strong_Bearish']
+# Strong signals
+strong_bulls = momentum_df[momentum_df['Signal_Strength'] == 'Strong_Bullish']
+strong_bears = momentum_df[momentum_df['Signal_Strength'] == 'Strong_Bearish']
 
-# print(f"\n" + "="*60)
-# print(f"🟢 Strong Bullish Signals: {len(strong_bulls)} tickers")
-# print(f"🔴 Strong Bearish Signals: {len(strong_bears)} tickers")
-# print("="*60)
+print(f"\n" + "="*60)
+print(f"🟢 Strong Bullish Signals: {len(strong_bulls)} tickers")
+print(f"🔴 Strong Bearish Signals: {len(strong_bears)} tickers")
+print("="*60)
