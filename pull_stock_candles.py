@@ -70,12 +70,12 @@ def main():
         additional_tickers = ['INTC', 'SB', 'AMAT', 'AAPL', 'ALMS', 'FSMD']
         symbol_list = list(set(symbol_list + additional_tickers))   # avoids duplicates
         
-    #     print(f"✅ Found {len(symbol_list)} tickers to process\n")
-    # except FileNotFoundError:
-    #     print("❌ Error: saved_data/FinVizData.csv not found!")
-    #     return
-    # except Exception as e:
-    #     print(f"❌ Error reading FinVizData.csv: {str(e)}")
+        print(f"✅ Found {len(symbol_list)} tickers to process\n")
+    except FileNotFoundError:
+        print("❌ Error: saved_data/FinVizData.csv not found!")
+        return
+    except Exception as e:
+        print(f"❌ Error reading FinVizData.csv: {str(e)}")
         return
     
     # # Pull data for all tickers in batch (avoids rate limiting!)
