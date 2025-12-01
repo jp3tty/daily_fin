@@ -61,16 +61,21 @@ def main():
     """Main function to pull data for all tickers"""
     
     # Read ticker list from FinViz data
-    print("Loading ticker list from FinVizData.csv...")
+    # print("Loading ticker list from FinVizData.csv...")
     try:
         df = pd.read_csv('saved_data/FinVizData.csv')
         symbol_list = df['Ticker'].tolist()
-        print(f"✅ Found {len(symbol_list)} tickers to process\n")
-    except FileNotFoundError:
-        print("❌ Error: saved_data/FinVizData.csv not found!")
-        return
-    except Exception as e:
-        print(f"❌ Error reading FinVizData.csv: {str(e)}")
+        
+        # Hardcoding additional tickers (to monitor specific stocks)
+        additional_tickers = ['INTC', 'SB', 'AMAT', 'AAPL', 'ALMS', 'FSMD']
+        symbol_list = list(set(symbol_list + additional_tickers))   # avoids duplicates
+        
+    #     print(f"✅ Found {len(symbol_list)} tickers to process\n")
+    # except FileNotFoundError:
+    #     print("❌ Error: saved_data/FinVizData.csv not found!")
+    #     return
+    # except Exception as e:
+    #     print(f"❌ Error reading FinVizData.csv: {str(e)}")
         return
     
     # # Pull data for all tickers in batch (avoids rate limiting!)
