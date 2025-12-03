@@ -1,8 +1,7 @@
 import pandas as pd 
 
-# Load FinViz data for ticker list and metadata
+# Load FinViz data for metadata (used for merge at the end)
 finviz_df = pd.read_csv('saved_data/FinVizData.csv') 
-symbol_list = stock_data['Ticker'].unique().tolist()
 price_df = finviz_df[['Ticker', 'Price']].sort_values(by='Price', ascending=True)
 
 # Load pre-downloaded stock candle data
@@ -16,6 +15,9 @@ except FileNotFoundError:
     print("❌ Error: saved_data/stock_candles_90d.csv not found!")
     print("Please run 'pull_stock_candles.py' first to download the data.")
     exit(1)
+
+# Get ticker list from stock data (includes additional tickers from pull_stock_candles.py)
+symbol_list = stock_data['Ticker'].unique().tolist()
 
 # Engulfing pattern detection function
 def Revsignal1(df1):

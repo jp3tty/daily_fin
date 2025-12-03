@@ -1,9 +1,8 @@
 import pandas as pd 
 import numpy as np
 
-# Load FinViz data for ticker list and metadata
+# Load FinViz data for metadata (used for merge at the end)
 finviz_df = pd.read_csv('saved_data/FinVizData.csv')
-symbol_list = stock_data['Ticker'].unique().tolist()
 
 # Load pre-downloaded stock candle data
 print("Loading stock candle data from CSV...")
@@ -18,6 +17,9 @@ except FileNotFoundError:
     print("❌ Error: saved_data/stock_candles_90d.csv not found!")
     print("Please run 'pull_stock_candles.py' first to download the data.")
     exit(1)
+
+# Get ticker list from stock data (includes additional tickers from pull_stock_candles.py)
+symbol_list = stock_data['ticker'].unique().tolist()
 
 # # Get the data for analysis
 # symbol = 'RCL' 
