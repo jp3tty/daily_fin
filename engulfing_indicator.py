@@ -2,7 +2,7 @@ import pandas as pd
 
 # Load FinViz data for ticker list and metadata
 finviz_df = pd.read_csv('saved_data/FinVizData.csv') 
-symbol_list = finviz_df['Ticker'].tolist()
+symbol_list = stock_data['Ticker'].unique().tolist()
 price_df = finviz_df[['Ticker', 'Price']].sort_values(by='Price', ascending=True)
 
 # Load pre-downloaded stock candle data

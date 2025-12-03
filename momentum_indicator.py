@@ -3,7 +3,7 @@ import numpy as np
 
 # Load FinViz data for ticker list and metadata
 finviz_df = pd.read_csv('saved_data/FinVizData.csv')
-symbol_list = finviz_df['Ticker'].tolist()
+symbol_list = stock_data['Ticker'].unique().tolist()
 
 # Load pre-downloaded stock candle data
 print("Loading stock candle data from CSV...")
