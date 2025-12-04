@@ -167,10 +167,9 @@ print(f"\nCompleted analysis of {len(results)} tickers!")
 momentum_df = pd.DataFrame(results)
 
 
-# Merge with FinViz Data and Export
-merged_df = finviz_df.merge(
-    momentum_df[['Ticker', 'RSI', 'Momentum', 'Momentum_Strength_Pct',
-                 'Current_Trend', 'Signal_Strength', 'Bullish_Days_30d', 'Bearish_Days_30d']],
+# Merge with FinViz metadata (momentum_df as base to include additional_tickers)
+merged_df = momentum_df.merge(
+    finviz_df,
     on='Ticker',
     how='left'
 )

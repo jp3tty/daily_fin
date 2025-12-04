@@ -131,9 +131,9 @@ print(f"\nCompleted analysis of {len(results)} tickers!")
 pattern_df = pd.DataFrame(results).sort_values(['Latest_Signal', 'Latest_Close'], ascending=False)
 # pattern_df
 
-# Merge pattern data with original FinViz data
-merged_df = finviz_df.merge(
-    pattern_df[['Ticker', 'Latest_Signal_Name', 'Latest_Close', 'Bearish_Count_90d', 'Bullish_Count_90d']], 
+# Merge pattern data with FinViz metadata (pattern_df as base to include additional_tickers)
+merged_df = pattern_df.merge(
+    finviz_df, 
     on='Ticker', 
     how='left'
 )
