@@ -176,13 +176,13 @@ merged_df = momentum_df.merge(
 
 # Save to CSV
 merged_df.to_csv('saved_data/FinVizData_with_momentum_indicators.csv', index=False)
-print("✅ Merged data saved to 'FinVizData_with_momentum_indicators.csv'")
+# print("✅ Merged data saved to 'FinVizData_with_momentum_indicators.csv'")
 
 
-# Summary Statistics
-print("\n" + "="*60)
-print("MOMENTUM ANALYSIS SUMMARY")
-print("="*60)
+# # Summary Statistics
+# print("\n" + "="*60)
+# print("MOMENTUM ANALYSIS SUMMARY")
+# print("="*60)
 
 # Trend distribution
 trend_counts = momentum_df['Current_Trend'].value_counts()
@@ -196,34 +196,34 @@ print(f"\nSignal Strength Distribution:")
 for strength, count in strength_counts.items():
     print(f"  {strength}: {count} ({count/len(momentum_df)*100:.1f}%)")
 
-# RSI statistics
-print(f"\nRSI Statistics:")
-print(f"  Average RSI: {momentum_df['RSI'].mean():.2f}")
-print(f"  Overbought (RSI > 70): {(momentum_df['RSI'] > 70).sum()} tickers")
-print(f"  Oversold (RSI < 30): {(momentum_df['RSI'] < 30).sum()} tickers")
+# # RSI statistics
+# print(f"\nRSI Statistics:")
+# print(f"  Average RSI: {momentum_df['RSI'].mean():.2f}")
+# print(f"  Overbought (RSI > 70): {(momentum_df['RSI'] > 70).sum()} tickers")
+# print(f"  Oversold (RSI < 30): {(momentum_df['RSI'] < 30).sum()} tickers")
 
-# Top momentum stocks
-print(f"\n" + "-"*60)
-print("TOP 10 BULLISH MOMENTUM STOCKS")
-print("-"*60)
+# # Top momentum stocks
+# print(f"\n" + "-"*60)
+# print("TOP 10 BULLISH MOMENTUM STOCKS")
+# print("-"*60)
 top_bullish = momentum_df.nlargest(10, 'Momentum_Strength_Pct')[
     ['Ticker', 'RSI', 'Momentum_Strength_Pct', 'Current_Trend']
 ]
-print(top_bullish.to_string(index=False))
+# print(top_bullish.to_string(index=False))
 
-print(f"\n" + "-"*60)
-print("TOP 10 BEARISH MOMENTUM STOCKS")
-print("-"*60)
+# print(f"\n" + "-"*60)
+# print("TOP 10 BEARISH MOMENTUM STOCKS")
+# print("-"*60)
 top_bearish = momentum_df.nsmallest(10, 'Momentum_Strength_Pct')[
     ['Ticker', 'RSI', 'Momentum_Strength_Pct', 'Current_Trend']
 ]
-print(top_bearish.to_string(index=False))
+# print(top_bearish.to_string(index=False))
 
 # Strong signals
 strong_bulls = momentum_df[momentum_df['Signal_Strength'] == 'Strong_Bullish']
 strong_bears = momentum_df[momentum_df['Signal_Strength'] == 'Strong_Bearish']
 
-print(f"\n" + "="*60)
-print(f"🟢 Strong Bullish Signals: {len(strong_bulls)} tickers")
-print(f"🔴 Strong Bearish Signals: {len(strong_bears)} tickers")
-print("="*60)
+# print(f"\n" + "="*60)
+# print(f"🟢 Strong Bullish Signals: {len(strong_bulls)} tickers")
+# print(f"🔴 Strong Bearish Signals: {len(strong_bears)} tickers")
+# print("="*60)
