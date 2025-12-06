@@ -22,6 +22,9 @@ dist/
 *.xls
 *.numbers
 
+# Streamlit
+.streamlit/
+
 # Environment variables
 .env
 .env.local
