@@ -122,7 +122,7 @@ for i, symbol in enumerate(symbol_list, 1):
             'Latest_Signal_Name': {0: 'Neutral', 1: 'Bearish', 2: 'Bullish'}[result['Latest_Signal']],
             'Latest_Date': result['Latest_Date'],
             'Bearish_Count_90d': result['Bearish_Count'],
-            'Bullish_Count_90d': result['Bullish_Count'],
+            'Bullish_Count_90d': result['Bulli sh_Count'],
             'Latest_Close': result['Latest_Close']
         })
 

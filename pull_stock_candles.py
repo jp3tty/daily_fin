@@ -67,7 +67,7 @@ def main():
         symbol_list = df['Ticker'].tolist()
         
         # Hardcoding additional tickers (to monitor specific stocks)
-        additional_tickers = ['INTC', 'SB', 'AMAT', 'AAPL', 'ALMS', 'FSMD']
+        additional_tickers = ['INTC', 'SB', 'AMAT', 'AAPL', 'ALMS', 'FSMD', 'KOS']
         symbol_list = list(set(symbol_list + additional_tickers))   # avoids duplicates
         
         print(f"✅ Found {len(symbol_list)} tickers to process\n")
