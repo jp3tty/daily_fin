@@ -1,256 +1,271 @@
-# Daily Financial Analysis
+# Development Directory
 
-Automated stock screening and technical analysis system with GitHub Actions integration.
+Development and testing environment for stock analysis tools and Streamlit dashboard.
 
-## 🎯 Overview
+## 🎯 Purpose
 
-This production system automatically:
-1. **Scrapes** stock data from FinViz based on custom filters
-2. **Analyzes** engulfing candlestick patterns (bullish/bearish signals)
-3. **Calculates** momentum indicators (RSI, moving averages, trend signals)
-4. **Commits** results to the repository daily after market close
+This directory is for:
+- Developing and testing new features
+- Experimenting with analysis parameters
+- Running local analysis before deploying to production
+- Testing modifications to indicators and screeners
+- Building and testing the Streamlit dashboard locally
 
-## 📊 Features
+## 🚀 Quick Start
 
-### Stock Screener (`stock_screener.py`)
-- Scrapes real-time stock data from FinViz
-- Configurable screening criteria (market cap, volume, performance)
-- Automatic pagination handling
-- Built-in rate limiting and error handling
-- Saves to `saved_data/FinVizData.csv`
+### Run Analysis Pipeline
 
-**Current Filters:**
-- Market cap: Small cap and above
-- Relative volume: Over 2x
-- Performance: Up 5%+ today
-- Sorted by: Market cap (descending)
+```bash
+cd /Users/jeremypetty/Documents/projects/Financials/dev
+./run_analysis.sh
+```
 
-### Engulfing Pattern Indicator (`engulfing_indicator.py`)
-- Detects bullish and bearish engulfing candlestick patterns
-- Analyzes 90 days of historical price data
-- Counts pattern frequency and identifies latest signals
-- Comprehensive summary statistics and price-based insights
-- Saves to `saved_data/FinVizData_with_engulfing_patterns.csv`
+### Run Streamlit Dashboard
 
-**Outputs:**
-- Latest signal: Bearish/Bullish/None
-- 90-day pattern counts
-- Latest closing prices
-- Pattern activity summaries
-- Price-based filtering (low-priced, high-priced stocks)
-
-### Momentum Indicator (`momentum_indicator.py`)
-- Calculates RSI (14-period Relative Strength Index)
-- Computes 10-day price momentum
-- Tracks SMA-20 and SMA-50 moving averages
-- Identifies bullish/bearish momentum trends
-- Detects strong signals (overbought/oversold conditions)
-- Saves to `saved_data/FinVizData_with_momentum_indicators.csv`
-
-**Outputs:**
-- Current trend: Bullish/Bearish/Neutral
-- Signal strength: Strong_Bullish/Strong_Bearish/Normal
-- RSI values and momentum metrics
-- 30-day trend statistics
-- Top momentum stocks
-
-## 🤖 Automated Execution
-
-### GitHub Actions Workflow
-
-The system runs automatically via GitHub Actions:
-
-**Schedule:** Weekdays at 4:30 PM EST (after market close)
-- Cron: `30 21 * * 1-5` (21:30 UTC)
-
-**Workflow Steps:**
-1. Sets up Python 3.11 environment
-2. Installs dependencies from `requirements.txt`
-3. Creates `saved_data/` directory
-4. Runs stock screener
-5. Runs engulfing pattern analysis
-6. Runs momentum indicator analysis
-7. Commits all CSV results to the repository
-
-**Manual Trigger:** You can manually trigger the workflow from the Actions tab in GitHub.
+```bash
+cd /Users/jeremypetty/Documents/projects/Financials/dev
+streamlit run streamlit_indicator_app.py
+```
 
 ## 📦 Installation
 
-### Requirements
+### First Time Setup
 
 ```bash
+# Navigate to project root
+cd /Users/jeremypetty/Documents/projects/Financials
+
+# Create virtual environment (if not already exists)
+python3 -m venv .venv
+
+# Activate virtual environment
+source .venv/bin/activate
+
+# Install dependencies
+pip install -r dev/requirements.txt
+```
+
+### Streamlit Secrets Setup
+
+Create `.streamlit/secrets.toml` for GitHub API access:
+
+```bash
+mkdir -p .streamlit
+echo 'github_token = "your_github_token_here"' > .streamlit/secrets.toml
+```
+
+> **Note:** The `.streamlit/` folder should be in `.gitignore` to protect your token.
+
+## 📂 Project Structure
+
+```
+dev/
+├── streamlit_indicator_app.py   # Main Streamlit dashboard
+├── components/                   # Streamlit visualization components
+│   ├── __init__.py
+│   └── charts.py                # Candlestick & momentum charts
+├── data/                         # Data loading & transformation
+│   ├── __init__.py
+│   ├── loaders.py               # GitHub data fetching
+│   └── transformers.py          # DataFrame merging & cleaning
+├── utils/                        # Shared utilities
+│   ├── __init__.py
+│   └── indicators.py            # RSI, momentum calculations
+├── stock_screener.py            # FinViz web scraper
+├── pull_stock_candles.py        # yfinance data downloader
+├── engulfing_indicator.py       # Engulfing pattern detection
+├── momentum_indicator.py        # Momentum indicator analysis
+├── run_analysis.sh              # Bash workflow runner
+├── run_analysis.py              # Python workflow runner
+├── requirements.txt             # Python dependencies
+├── saved_data/                  # Generated CSV output
+│   ├── FinVizData.csv
+│   ├── stock_candles_90d.csv
+│   ├── FinVizData_with_engulfing_patterns.csv
+│   └── FinVizData_with_momentum_indicators.csv
+└── .streamlit/
+    └── secrets.toml             # GitHub token (not tracked in git)
+```
+
+## 🔄 Data Pipeline Workflow
+
+```
+run_analysis.sh
+      │
+      ├─► stock_screener.py
+      │   └─► saved_data/FinVizData.csv
+      │
+      ├─► pull_stock_candles.py
+      │   └─► saved_data/stock_candles_90d.csv
+      │
+      ├─► engulfing_indicator.py
+      │   └─► saved_data/FinVizData_with_engulfing_patterns.csv
+      │
+      └─► momentum_indicator.py
+          └─► saved_data/FinVizData_with_momentum_indicators.csv
+```
+
+## 📊 Streamlit Dashboard
+
+The Streamlit app (`streamlit_indicator_app.py`) provides an interactive dashboard with:
+
+- **Ticker Table** - Paginated, sortable, filterable table with AG-Grid
+- **Candlestick Charts** - Interactive Plotly charts with:
+  - Price candlesticks with SMA 20/50
+  - RSI indicator with overbought/oversold zones
+  - Momentum indicator
+  - Bullish/bearish momentum markers
+
+### Data Flow
+
+```
+GitHub (jp3tty/daily_fin)
+      │
+      └─► data/loaders.py (load_data_from_github)
+          ├── FinVizData_with_momentum_indicators.csv
+          ├── FinVizData_with_engulfing_patterns.csv
+          └── stock_candles_90d.csv
+                │
+                └─► data/transformers.py (create_merged_df)
+                    │
+                    └─► Streamlit Display
+                        ├── AG-Grid Table
+                        └── Plotly Charts (components/charts.py)
+```
+
+### Modular Architecture
+
+| Module | Purpose |
+|--------|---------|
+| `data/loaders.py` | Fetch CSVs from GitHub with authentication |
+| `data/transformers.py` | Merge engulfing + momentum data, clean columns |
+| `utils/indicators.py` | RSI, momentum, trend calculations for charts |
+| `components/charts.py` | Plotly candlestick chart with indicators |
+
+## 📋 Stock Selection Criteria
+
+Stocks in the dashboard are selected via FinViz screener with these filters:
+
+| Filter | Criteria |
+|--------|----------|
+| Market Cap | Small cap and above |
+| Relative Volume | Over 2x average |
+| 5-Day Performance | Over 5% gain |
+| Sort | Market cap (descending) |
+
+## 🔧 Analysis Scripts
+
+### `stock_screener.py`
+Scrapes FinViz for stocks matching the screening criteria.
+
+### `pull_stock_candles.py`
+Downloads 90 days of OHLCV data from yfinance for all screened tickers.
+
+### `engulfing_indicator.py`
+Detects bullish and bearish engulfing candlestick patterns.
+
+**Signals:**
+- `Bullish` - Bullish engulfing pattern detected
+- `Bearish` - Bearish engulfing pattern detected
+- `Neutral` - No engulfing pattern
+
+### `momentum_indicator.py`
+Calculates momentum indicators and trend signals.
+
+**Indicators:**
+- RSI (14-period)
+- Price Momentum (10-day)
+- SMA 20 & SMA 50
+- Momentum Strength %
+
+**Trend Signals:**
+- `Bullish` - RSI > 50, price > SMA20 > SMA50, momentum > 0
+- `Bearish` - RSI < 50, price < SMA20 < SMA50, momentum < 0
+- `Neutral` - Mixed signals
+
+**Strength Signals:**
+- `Strong_Bullish` - RSI > 70 or momentum strength > 5%
+- `Strong_Bearish` - RSI < 30 or momentum strength < -5%
+- `Normal` - Within normal ranges
+
+## 💡 Usage Tips
+
+### Run Individual Scripts
+
+```bash
+# Re-run just the screener
+python3 stock_screener.py
+
+# Re-run just engulfing analysis
+python3 engulfing_indicator.py
+
+# Re-run just momentum analysis
+python3 momentum_indicator.py
+```
+
+### Check Output Files
+
+```bash
+ls -lh saved_data/
+head saved_data/FinVizData.csv
+```
+
+### Clear Streamlit Cache
+
+If data isn't updating in Streamlit:
+1. Click hamburger menu (top right) → "Clear cache"
+2. Or restart: `Ctrl+C` then `streamlit run streamlit_indicator_app.py`
+
+## 🐛 Troubleshooting
+
+### "Module not found" Error
+
+```bash
+source ../.venv/bin/activate
 pip install -r requirements.txt
 ```
 
-**Dependencies:**
-- `requests` - HTTP requests for web scraping
-- `beautifulsoup4` - HTML parsing
-- `lxml` - XML/HTML parser
-- `pandas` - Data manipulation
-- `numpy` - Numerical computing
-- `yfinance` - Yahoo Finance data
+### "GitHub token not found" Error
 
-## 🚀 Usage
+Create `.streamlit/secrets.toml`:
+```bash
+mkdir -p .streamlit
+echo 'github_token = "ghp_your_token_here"' > .streamlit/secrets.toml
+```
 
-### Running Locally
+### Streamlit AG-Grid Issues
 
 ```bash
-# Create the data directory
-mkdir -p saved_data
-
-# Run individual scripts
-python stock_screener.py
-python engulfing_indicator.py
-python momentum_indicator.py
+pip install streamlit-aggrid
 ```
 
-### Running All Scripts
+### Script Fails with NameError
 
+Ensure scripts are run in order (screener → candles → indicators), or use:
 ```bash
-# Run the complete analysis pipeline
-python stock_screener.py && \
-python engulfing_indicator.py && \
-python momentum_indicator.py
+./run_analysis.sh
 ```
 
-### Configuration
+## 🧪 Development vs Production
 
-**Stock Screener:**
-Edit the `url` variable in `stock_screener.py` line 114 to customize filters:
+| Aspect | Development (`dev/`) | Production (`prod/daily_fin/`) |
+|--------|---------------------|-------------------------------|
+| Purpose | Testing & experimentation | Stable, automated runs |
+| Scheduling | Manual | GitHub Actions (daily 4:30 PM EST) |
+| Output | Local only | Committed to repository |
+| Streamlit | Local development | Streamlit Cloud (future) |
 
-```python
-url = "https://finviz.com/screener.ashx?v=121&f=cap_smallover,sh_relvol_o2,ta_perf_d5o&ft=4&o=-marketcap"
-```
+## 📝 Deployment Checklist
 
-**Analysis Parameters:**
-- **Engulfing Indicator:** Modify `days=90` in line 112 to adjust historical lookback
-- **Momentum Indicator:** Modify `days=90` in line 151 to adjust historical lookback
+Before copying changes to production:
 
-## 📂 Output Files
-
-All output files are stored in `saved_data/`:
-
-### `FinVizData.csv`
-**Source:** Stock Screener  
-**Contains:**
-- Ticker symbols
-- Market cap, P/E ratios, valuations (P/S, P/B, P/C, P/FCF)
-- Growth metrics (EPS, Sales growth)
-- Current price, change, volume
-- Scraped timestamp
-
-### `FinVizData_with_engulfing_patterns.csv`
-**Source:** Engulfing Indicator  
-**Contains:**
-- All columns from `FinVizData.csv`
-- Latest signal name (Bearish/Bullish/None)
-- Latest closing price from yfinance
-- Bearish pattern count (90-day)
-- Bullish pattern count (90-day)
-
-### `FinVizData_with_momentum_indicators.csv`
-**Source:** Momentum Indicator  
-**Contains:**
-- All columns from `FinVizData.csv`
-- RSI (14-period)
-- 10-day momentum
-- Momentum strength percentage
-- Current trend (Bullish/Bearish/Neutral)
-- Signal strength (Strong_Bullish/Strong_Bearish/Normal)
-- Bullish/bearish days count (30-day)
-
-## 📊 Summary Statistics
-
-Each analysis script provides detailed console output:
-
-**Engulfing Patterns:**
-- Total tickers analyzed
-- Signal distribution percentages
-- 90-day pattern totals and averages
-- Price statistics
-- Top 5 tickers by pattern activity
-- Latest engulfing patterns detected
-- Low/high-priced stock insights
-
-**Momentum Indicators:**
-- Trend distribution (Bullish/Bearish/Neutral)
-- Signal strength distribution
-- RSI statistics (average, overbought, oversold)
-- Top 10 bullish/bearish momentum stocks
-- Strong signal counts
-
-## 🔐 Data Protection
-
-**`.gitignore` Configuration:**
-- All CSV files are ignored by default
-- Exception: CSVs in `saved_data/` are tracked for automated commits
-- This prevents accidental commits of test data while allowing workflow outputs
-
-## 📅 Data Freshness
-
-**Automated Updates:**
-- Runs Monday-Friday at 4:30 PM EST (after market close)
-- Provides same-day analysis with latest market data
-- Historical data: 90-day lookback for pattern analysis
-
-**Data Sources:**
-- **FinViz:** Real-time screener data
-- **Yahoo Finance (yfinance):** Historical OHLC data for technical analysis
-
-## 🛠 Development
-
-This is a **production repository**. Development and experimental work should be done in the parent `dev/` directory.
-
-**Production Standards:**
-- ✅ Tested and validated code only
-- ✅ Comprehensive error handling
-- ✅ Detailed logging
-- ✅ Production-ready configuration
-
-## 📈 Use Cases
-
-- **Daily Stock Screening:** Identify high-volume movers
-- **Pattern Recognition:** Find bullish/bearish engulfing setups
-- **Momentum Trading:** Track RSI and moving average trends
-- **Signal Confirmation:** Cross-reference multiple indicators
-- **Historical Analysis:** Review 90-day pattern frequency
-- **Automated Alerts:** GitHub commit notifications for daily updates
-
-## 🔄 Workflow
-
-```
-┌─────────────────────┐
-│  GitHub Actions     │
-│  (Daily 4:30 PM)    │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│  Stock Screener     │──► saved_data/FinVizData.csv
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│ Engulfing Indicator │──► saved_data/FinVizData_with_engulfing_patterns.csv
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│ Momentum Indicator  │──► saved_data/FinVizData_with_momentum_indicators.csv
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│   Git Commit        │
-│   & Push to Repo    │
-└─────────────────────┘
-```
-
-## 📝 License
-
-Personal project - All rights reserved
+1. ✅ Test complete workflow: `./run_analysis.sh`
+2. ✅ Verify all CSV files generated correctly
+3. ✅ Check Streamlit dashboard displays data
+4. ✅ Review summary statistics output
+5. ✅ Copy updated scripts to `prod/daily_fin/`
 
 ---
 
-**Last Updated:** 2025-11-26  
-**Maintainer:** Jeremy Petty
+**Development Environment**  
+**Last Updated:** 2025-12-08
