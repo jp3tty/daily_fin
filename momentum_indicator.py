@@ -119,7 +119,7 @@ def run_momentum_analysis():
         exit(1)
 
     # Get symbol list from candle data
-    symbol_list = stock_data['Ticker'].unique().tolist()
+    symbol_list = stock_data['ticker'].unique().tolist()
 
     logging.info(f"Analyzing {len(symbol_list)} tickers for momentum indicators")
 
