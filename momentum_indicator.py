@@ -108,7 +108,6 @@ def run_momentum_analysis():
     """Main analysis workflow"""
     # Load FinViz data
     finviz_df = pd.read_csv('saved_data/FinVizData.csv')
-    symbol_list = finviz_df['Ticker'].unique().tolist()
 
     # Load stock candle data
     try:
@@ -118,6 +117,9 @@ def run_momentum_analysis():
     except FileNotFoundError:
         logging.error("saved_data/stock_candles_90d.csv not found")
         exit(1)
+
+    # Get symbol list from candle data
+    symbol_list = stock_data['Ticker'].unique().tolist()
 
     logging.info(f"Analyzing {len(symbol_list)} tickers for momentum indicators")
 
@@ -130,9 +132,8 @@ def run_momentum_analysis():
     momentum_df = pd.DataFrame(results)
 
     # Merge with FinViz data
-    merged_df = finviz_df.merge(
-        momentum_df[['Ticker', 'RSI', 'Momentum', 'Momentum_Strength_Pct',
-                     'Current_Trend', 'Signal_Strength', 'Bullish_Days_30d', 'Bearish_Days_30d']],
+    merged_df = momentum_df.merge(
+        finviz_df.drop(columns=['No.'], errors='ignore'),
         on='Ticker',
         how='left'
     )

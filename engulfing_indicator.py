@@ -82,7 +82,6 @@ def run_engulfing_analysis():
     """Main analysis workflow"""
     # Load FinViz data
     finviz_df = pd.read_csv('saved_data/FinVizData.csv') 
-    symbol_list = finviz_df['Ticker'].unique().tolist()
 
     # Load stock candle data
     try:
@@ -91,6 +90,9 @@ def run_engulfing_analysis():
     except FileNotFoundError:
         logging.error("saved_data/stock_candles_90d.csv not found")
         exit(1)
+
+    # Get symbol list from candle data
+    symbol_list = stock_data['Ticker'].unique().tolist()
 
     logging.info(f"Analyzing {len(symbol_list)} tickers for engulfing patterns")
 
@@ -110,10 +112,10 @@ def run_engulfing_analysis():
 
     pattern_df = pd.DataFrame(results).sort_values(['Latest_Signal', 'Latest_Close'], ascending=False)
 
-    # Merge with FinViz data
-    merged_df = finviz_df.merge(
-        pattern_df[['Ticker', 'Latest_Signal_Name', 'Latest_Close', 'Bearish_Count_90d', 'Bullish_Count_90d']], 
-        on='Ticker', 
+    # Merge FinViz data onto pattern results
+    merged_df = pattern_df.merge(
+        finviz_df.drop(columns=['No.'], errors='ignore'),
+        on='Ticker',
         how='left'
     )
 
