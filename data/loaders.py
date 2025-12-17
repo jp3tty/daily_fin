@@ -5,9 +5,6 @@ from io import StringIO
 
 @st.cache_data(ttl=3600)
 def load_data_from_github():
-    token = st.secrets["github_token"]
-    headers = {'Authorization': f'token {token}'}
-    
     url_mom = 'https://raw.githubusercontent.com/jp3tty/daily_fin/main/saved_data/FinVizData_with_momentum_indicators.csv'
     url_eng = 'https://raw.githubusercontent.com/jp3tty/daily_fin/main/saved_data/FinVizData_with_engulfing_patterns.csv'
     url_can = 'https://raw.githubusercontent.com/jp3tty/daily_fin/main/saved_data/stock_candles_90d.csv'
