@@ -95,14 +95,7 @@ def plot_momentum_candlestick(symbol, df_can, days=20):
         xref="x2 domain", yref="y2 domain",
         x=0.5, y=-0.25,
         showarrow=False,
-        font=dict(size=14, color="gray")
+        font=dict(size=10, color="gray")
     )
-    fig.add_annotation(
-        text="<i>Momentum shows price change over 10 days; positive = uptrend, negative = downtrend</i>",
-        xref="x3 domain", yref="y3 domain",
-        x=0.5, y=-0.3,
-        showarrow=False,
-        font=dict(size=14, color="gray")
-    )
-
+   
     return fig
