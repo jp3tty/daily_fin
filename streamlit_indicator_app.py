@@ -35,5 +35,7 @@ if selected_rows is not None and len(selected_rows) > 0:
 else:
     selected_ticker = merged_df['Ticker'].iloc[0]
 
-fig = plot_momentum_candlestick(selected_ticker, df_can)
+days_range = st.slider("Date Range (days)", min_value=5, max_value=90, value=20)
+
+fig = plot_momentum_candlestick(selected_ticker, df_can, days=days_range)
 st.plotly_chart(fig)
