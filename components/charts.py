@@ -4,7 +4,7 @@ from plotly.subplots import make_subplots
 from datetime import datetime, timedelta
 from utils.indicators import identify_momentum_trend
 
-def plot_momentum_candlestick(symbol, df_can, months=3):
+def plot_momentum_candlestick(symbol, df_can, months=0.25):
     """Plot candlestick chart with momentum indicators"""
     df = df_can[df_can['Ticker'] == symbol].copy()
     
