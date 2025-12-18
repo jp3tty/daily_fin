@@ -11,7 +11,7 @@ logging.basicConfig(
 
 # Configuration
 DAYS_TO_PULL = 90
-ADDITIONAL_TICKERS = ['INTC', 'AMAT', 'AAPL', 'ALMS', 'FSMD', 'HOPE']
+ADDITIONAL_TICKERS = ['AMAT', 'AAPL', 'ALMS', 'FSMD', 'HOPE', 'INTC']
 
 def pull_all_stock_data(symbol_list, days=90):
     """
