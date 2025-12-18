@@ -86,7 +86,23 @@ def plot_momentum_candlestick(symbol, df_can, days=20):
         xaxis_rangeslider_visible=False)
 
     fig.update_yaxes(title_text="<b>Price (USD)</b><br>w/ SMA 20 & 50", row=1, col=1)
-    fig.update_yaxes(title_text="<b>RSI (14)</b><br><sub>>70 overbought, <30 oversold</sub>", row=2, col=1, range=[0, 100])
-    fig.update_yaxes(title_text="<b>Momentum (10-day)</b><br><sub>Price change over 10 days</sub>", row=3, col=1)
+    fig.update_yaxes(title_text="<b>RSI (14)</b>", row=2, col=1, range=[0, 100])
+    fig.update_yaxes(title_text="<b>Momentum (10-day)</b>", row=3, col=1)
+
+    # Add captions below RSI and Momentum plots
+    fig.add_annotation(
+        text="<i>RSI >70 suggests overbought, <30 suggests oversold</i>",
+        xref="x2 domain", yref="y2 domain",
+        x=0.5, y=-0.25,
+        showarrow=False,
+        font=dict(size=10, color="gray")
+    )
+    fig.add_annotation(
+        text="<i>Momentum shows price change over 10 days; positive = uptrend, negative = downtrend</i>",
+        xref="x3 domain", yref="y3 domain",
+        x=0.5, y=-0.3,
+        showarrow=False,
+        font=dict(size=10, color="gray")
+    )
 
     return fig
