@@ -9,6 +9,10 @@ from pull_stock_candles import ADDITIONAL_TICKERS
 df_mom, df_eng, df_can = load_data_from_github()
 merged_df = create_merged_df(df_mom, df_eng)
 
+# Filter table to only show tickers with candle data
+tickers_with_candles = df_can['Ticker'].unique()
+merged_df = merged_df[merged_df['Ticker'].isin(tickers_with_candles)]
+
 st.title('📈 Candlestick Pattern Analysis')
 
 st.header("Selected Ticker Table")
@@ -42,4 +46,7 @@ else:
 days_range = st.slider("Date Range (days)", min_value=5, max_value=90, value=20)
 
 fig = plot_momentum_candlestick(selected_ticker, df_can, days=days_range)
-st.plotly_chart(fig)
+if fig is not None:
+    st.plotly_chart(fig)
+else:
+    st.warning(f"No candle data available for {selected_ticker}. This ticker may not have been included in the latest data pull.")
