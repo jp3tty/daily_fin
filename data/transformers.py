@@ -26,24 +26,21 @@ def create_merged_df(_df_mom, _df_eng):
     df_mom = _df_mom.rename(columns=col_rename_mom).drop('No.', axis=1, errors='ignore')
     df_eng = _df_eng.rename(columns=col_rename_eng).drop('No.', axis=1, errors='ignore')
     
-    # Merge on common columns
-    merged_df = pd.merge(
-        df_eng, df_mom, 
-        how='left', 
-        on=['Ticker', 'Market Cap', 'P/E', 'Fwd P/E', 'PEG', 'P/S', 'P/B',
-            'P/C', 'P/FCF', 'EPS This Y', 'EPS Next Y', 'EPS Past 5Y',
-            'EPS Next 5Y', 'Sales Past 5Y', 'Price', 'Change', 'Volume']
-    )
-
-    display_cols = ['Ticker', 'Latest_Close_Eng', 'Latest_Signal_Name_Eng',
-                    'Current_Trend_Mom', 'Signal_Strength_Mom']
-    merged_df = merged_df[display_cols]
+    # Select only the columns we need before merging
+    eng_cols = ['Ticker', 'Latest_Close_Eng', 'Latest_Signal_Name_Eng']
+    mom_cols = ['Ticker', 'Current_Trend_Mom', 'Signal_Strength_Mom']
+    
+    df_eng_slim = df_eng[eng_cols]
+    df_mom_slim = df_mom[mom_cols]
+    
+    # Merge on Ticker only
+    merged_df = pd.merge(df_eng_slim, df_mom_slim, how='outer', on='Ticker')
     merged_df = merged_df.rename(columns={'Latest_Close_Eng': 'Latest Close',
                                           'Latest_Signal_Name_Eng': 'Engulfing Signal',
                                           'Current_Trend_Mom': 'Momentum Trend',
                                           'Signal_Strength_Mom': 'Momentum Strength'})
 
-    # Round "Latest Close" to 2 decimal places
-    merged_df['Latest Close'] = merged_df['Latest Close'].astype(float).round(2)
+    # Round "Latest Close" to 2 decimal places (handle NaN safely)
+    merged_df['Latest Close'] = pd.to_numeric(merged_df['Latest Close'], errors='coerce').round(2)
 
-    return merged_df.sort_values(by='Ticker', ascending=True)
+    return merged_df.sort_values(by='Ticker', ascending=True).reset_index(drop=True)
