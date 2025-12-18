@@ -15,7 +15,7 @@ st.header("Selected Ticker Table")
 monitored_stocks = ", ".join(ADDITIONAL_TICKERS)
 st.caption(f"Daily candlestick patterns for stocks with small market cap, relative volume > 2x, and 5-day performance > 5%. "
     f"Select a ticker from the table to view the candlestick chart. This table is updated daily after the market closes. "
-    f"Monitored stocks: {monitored_stocks}.")
+    f"{monitored_stocks} are also monitored regardless of the screening criteria. These are stocks of personal interest.")
 
 gb = GridOptionsBuilder.from_dataframe(merged_df)
 gb.configure_pagination(paginationAutoPageSize=False, paginationPageSize=11)
