@@ -4,6 +4,7 @@ from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode
 from data.loaders import load_data_from_github
 from data.transformers import create_merged_df
 from components.charts import plot_momentum_candlestick
+from pull_stock_candles import ADDITIONAL_TICKERS
 
 df_mom, df_eng, df_can = load_data_from_github()
 merged_df = create_merged_df(df_mom, df_eng)
@@ -11,8 +12,10 @@ merged_df = create_merged_df(df_mom, df_eng)
 st.title('📈 Candlestick Pattern Analysis')
 
 st.header("Selected Ticker Table")
-st.caption("Daily candlestick patterns for stocks with small market cap, relative volume > 2x, and 5-day performance > 5%.\
-    Select a ticker from the table to view the candlestick chart. This table is updated daily after the market closes.")
+monitored_stocks = ", ".join(ADDITIONAL_TICKERS)
+st.caption(f"Daily candlestick patterns for stocks with small market cap, relative volume > 2x, and 5-day performance > 5%. "
+    f"Select a ticker from the table to view the candlestick chart. This table is updated daily after the market closes. "
+    f"Monitored stocks: {monitored_stocks}.")
 
 gb = GridOptionsBuilder.from_dataframe(merged_df)
 gb.configure_pagination(paginationAutoPageSize=False, paginationPageSize=11)

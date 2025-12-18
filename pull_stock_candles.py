@@ -11,6 +11,7 @@ logging.basicConfig(
 
 # Configuration
 DAYS_TO_PULL = 90
+ADDITIONAL_TICKERS = ['INTC', 'AMAT', 'AAPL', 'ALMS', 'FSMD', 'HOPE']
 
 def pull_all_stock_data(symbol_list, days=90):
     """
@@ -67,9 +68,8 @@ def main():
         df = pd.read_csv('saved_data/FinVizData.csv')
         symbol_list = df['Ticker'].tolist()
         
-        # Hardcoding additional tickers (to monitor specific stocks)
-        additional_tickers = ['INTC', 'AMAT', 'AAPL', 'ALMS', 'FSMD', 'HOPE']
-        symbol_list = list(set(symbol_list + additional_tickers))
+        # Add monitored tickers
+        symbol_list = list(set(symbol_list + ADDITIONAL_TICKERS))
         
         logging.info(f"Processing {len(symbol_list)} tickers")
         
