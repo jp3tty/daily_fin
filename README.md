@@ -1,67 +1,58 @@
-# Development Directory
+# Daily Stock Analysis Dashboard
 
-Development and testing environment for stock analysis tools and Streamlit dashboard.
+Stock analysis pipeline and Streamlit visualization dashboard for candlestick pattern analysis.
+
+🔗 **Live App:** [dailyfin-cxtubrf4ninvvdyty6nf5p.streamlit.app](https://dailyfin-cxtubrf4ninvvdyty6nf5p.streamlit.app/)
 
 ## 🎯 Purpose
 
-This directory is for:
-- Developing and testing new features
-- Experimenting with analysis parameters
-- Running local analysis before deploying to production
-- Testing modifications to indicators and screeners
-- Building and testing the Streamlit dashboard locally
+This repository provides:
+- Automated daily stock screening from FinViz
+- Technical indicator calculations (RSI, momentum, engulfing patterns)
+- Interactive Streamlit dashboard for visualization
+- Data pipeline that generates CSV files for analysis
 
 ## 🚀 Quick Start
 
-### Run Analysis Pipeline
+### Run Data Pipeline
 
 ```bash
-cd /Users/jeremypetty/Documents/projects/Financials/dev
-./run_analysis.sh
+# 1. Screen stocks from FinViz
+python stock_screener.py
+
+# 2. Pull 90 days of candle data
+python pull_stock_candles.py
+
+# 3. Calculate engulfing patterns
+python engulfing_indicator.py
+
+# 4. Calculate momentum indicators
+python momentum_indicator.py
 ```
 
-### Run Streamlit Dashboard
+### Run Streamlit Dashboard Locally
 
 ```bash
-cd /Users/jeremypetty/Documents/projects/Financials/dev
 streamlit run streamlit_indicator_app.py
 ```
 
 ## 📦 Installation
 
-### First Time Setup
-
 ```bash
-# Navigate to project root
-cd /Users/jeremypetty/Documents/projects/Financials
-
-# Create virtual environment (if not already exists)
+# Create virtual environment
 python3 -m venv .venv
-
-# Activate virtual environment
 source .venv/bin/activate
 
 # Install dependencies
-pip install -r dev/requirements.txt
+pip install -r requirements.txt
 ```
-
-### Streamlit Secrets Setup
-
-Create `.streamlit/secrets.toml` for GitHub API access:
-
-```bash
-mkdir -p .streamlit
-echo 'github_token = "your_github_token_here"' > .streamlit/secrets.toml
-```
-
-> **Note:** The `.streamlit/` folder should be in `.gitignore` to protect your token.
 
 ## 📂 Project Structure
 
 ```
-dev/
-├── streamlit_indicator_app.py   # Main Streamlit dashboard
-├── components/                   # Streamlit visualization components
+daily_fin/
+├── streamlit_indicator_app.py   # Main Streamlit dashboard (deployed)
+├── components/                   # Visualization components
 │   ├── __init__.py
 │   └── charts.py                # Candlestick & momentum charts
 ├── data/                         # Data loading & transformation
@@ -75,39 +66,36 @@ dev/
 ├── pull_stock_candles.py        # yfinance data downloader
 ├── engulfing_indicator.py       # Engulfing pattern detection
 ├── momentum_indicator.py        # Momentum indicator analysis
-├── run_analysis.sh              # Bash workflow runner
-├── run_analysis.py              # Python workflow runner
 ├── requirements.txt             # Python dependencies
 ├── saved_data/                  # Generated CSV output
 │   ├── FinVizData.csv
 │   ├── stock_candles_90d.csv
 │   ├── FinVizData_with_engulfing_patterns.csv
 │   └── FinVizData_with_momentum_indicators.csv
-└── .streamlit/
-    └── secrets.toml             # GitHub token (not tracked in git)
+└── README.md
 ```
 
 ## 🔄 Data Pipeline Workflow
 
 ```
-run_analysis.sh
+stock_screener.py
       │
-      ├─► stock_screener.py
-      │   └─► saved_data/FinVizData.csv
-      │
-      ├─► pull_stock_candles.py
-      │   └─► saved_data/stock_candles_90d.csv
-      │
-      ├─► engulfing_indicator.py
-      │   └─► saved_data/FinVizData_with_engulfing_patterns.csv
-      │
-      └─► momentum_indicator.py
-          └─► saved_data/FinVizData_with_momentum_indicators.csv
+      └─► saved_data/FinVizData.csv
+              │
+              └─► pull_stock_candles.py
+                      │
+                      └─► saved_data/stock_candles_90d.csv
+                              │
+                              ├─► engulfing_indicator.py
+                              │       └─► saved_data/FinVizData_with_engulfing_patterns.csv
+                              │
+                              └─► momentum_indicator.py
+                                      └─► saved_data/FinVizData_with_momentum_indicators.csv
 ```
 
 ## 📊 Streamlit Dashboard
 
-The Streamlit app (`streamlit_indicator_app.py`) provides an interactive dashboard with:
+The deployed Streamlit app provides an interactive dashboard with:
 
 - **Ticker Table** - Paginated, sortable, filterable table with AG-Grid
 - **Candlestick Charts** - Interactive Plotly charts with:
@@ -116,10 +104,10 @@ The Streamlit app (`streamlit_indicator_app.py`) provides an interactive dashboa
   - Momentum indicator
   - Bullish/bearish momentum markers
 
-### Data Flow
+### Dashboard Data Flow
 
 ```
-GitHub (jp3tty/daily_fin)
+GitHub (jp3tty/daily_fin/saved_data/)
       │
       └─► data/loaders.py (load_data_from_github)
           ├── FinVizData_with_momentum_indicators.csv
@@ -137,14 +125,14 @@ GitHub (jp3tty/daily_fin)
 
 | Module | Purpose |
 |--------|---------|
-| `data/loaders.py` | Fetch CSVs from GitHub with authentication |
+| `data/loaders.py` | Fetch CSVs from GitHub (public repo) |
 | `data/transformers.py` | Merge engulfing + momentum data, clean columns |
 | `utils/indicators.py` | RSI, momentum, trend calculations for charts |
 | `components/charts.py` | Plotly candlestick chart with indicators |
 
 ## 📋 Stock Selection Criteria
 
-Stocks in the dashboard are selected via FinViz screener with these filters:
+Stocks are selected via FinViz screener with these filters:
 
 | Filter | Criteria |
 |--------|----------|
@@ -159,15 +147,16 @@ Stocks in the dashboard are selected via FinViz screener with these filters:
 Scrapes FinViz for stocks matching the screening criteria.
 
 ### `pull_stock_candles.py`
-Downloads 90 days of OHLCV data from yfinance for all screened tickers.
+Downloads 90 days of OHLCV data from yfinance for all screened tickers (plus monitored tickers: INTC, SB, AMAT, AAPL, ALMS, FSMD, HOPE).
 
 ### `engulfing_indicator.py`
 Detects bullish and bearish engulfing candlestick patterns.
 
-**Signals:**
-- `Bullish` - Bullish engulfing pattern detected
-- `Bearish` - Bearish engulfing pattern detected
-- `Neutral` - No engulfing pattern
+| Signal | Description |
+|--------|-------------|
+| `Bullish` | Bullish engulfing pattern detected |
+| `Bearish` | Bearish engulfing pattern detected |
+| `Neutral` | No engulfing pattern |
 
 ### `momentum_indicator.py`
 Calculates momentum indicators and trend signals.
@@ -179,93 +168,65 @@ Calculates momentum indicators and trend signals.
 - Momentum Strength %
 
 **Trend Signals:**
-- `Bullish` - RSI > 50, price > SMA20 > SMA50, momentum > 0
-- `Bearish` - RSI < 50, price < SMA20 < SMA50, momentum < 0
-- `Neutral` - Mixed signals
+| Signal | Criteria |
+|--------|----------|
+| `Bullish` | RSI > 50, price > SMA20 > SMA50, momentum > 0 |
+| `Bearish` | RSI < 50, price < SMA20 < SMA50, momentum < 0 |
+| `Neutral` | Mixed signals |
 
 **Strength Signals:**
-- `Strong_Bullish` - RSI > 70 or momentum strength > 5%
-- `Strong_Bearish` - RSI < 30 or momentum strength < -5%
-- `Normal` - Within normal ranges
+| Signal | Criteria |
+|--------|----------|
+| `Strong_Bullish` | RSI > 70 or momentum strength > 5% |
+| `Strong_Bearish` | RSI < 30 or momentum strength < -5% |
+| `Normal` | Within normal ranges |
 
-## 💡 Usage Tips
+## ☁️ Deployment
 
-### Run Individual Scripts
+### Streamlit Cloud
+
+The app is deployed on Streamlit Community Cloud:
+- **Repository:** `jp3tty/daily_fin`
+- **Main file:** `streamlit_indicator_app.py`
+- **Data source:** CSV files from `saved_data/` in this repo (public)
+
+### Updating the Dashboard
+
+1. Run the data pipeline locally to generate new CSV files
+2. Commit and push changes to GitHub
+3. Streamlit Cloud automatically redeploys
 
 ```bash
-# Re-run just the screener
-python3 stock_screener.py
-
-# Re-run just engulfing analysis
-python3 engulfing_indicator.py
-
-# Re-run just momentum analysis
-python3 momentum_indicator.py
+git add saved_data/
+git commit -m "Auto-update: Stock analysis $(date '+%Y-%m-%d %H:%M:%S')"
+git push
 ```
-
-### Check Output Files
-
-```bash
-ls -lh saved_data/
-head saved_data/FinVizData.csv
-```
-
-### Clear Streamlit Cache
-
-If data isn't updating in Streamlit:
-1. Click hamburger menu (top right) → "Clear cache"
-2. Or restart: `Ctrl+C` then `streamlit run streamlit_indicator_app.py`
 
 ## 🐛 Troubleshooting
 
 ### "Module not found" Error
-
 ```bash
-source ../.venv/bin/activate
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### "GitHub token not found" Error
-
-Create `.streamlit/secrets.toml`:
-```bash
-mkdir -p .streamlit
-echo 'github_token = "ghp_your_token_here"' > .streamlit/secrets.toml
-```
-
 ### Streamlit AG-Grid Issues
-
 ```bash
 pip install streamlit-aggrid
 ```
 
-### Script Fails with NameError
+### Data Pipeline Failures
+Run scripts in order — each depends on the previous output:
+1. `stock_screener.py` (generates FinVizData.csv)
+2. `pull_stock_candles.py` (reads FinVizData.csv)
+3. `engulfing_indicator.py` (reads stock_candles_90d.csv)
+4. `momentum_indicator.py` (reads stock_candles_90d.csv)
 
-Ensure scripts are run in order (screener → candles → indicators), or use:
-```bash
-./run_analysis.sh
-```
-
-## 🧪 Development vs Production
-
-| Aspect | Development (`dev/`) | Production (`prod/daily_fin/`) |
-|--------|---------------------|-------------------------------|
-| Purpose | Testing & experimentation | Stable, automated runs |
-| Scheduling | Manual | GitHub Actions (daily 4:30 PM EST) |
-| Output | Local only | Committed to repository |
-| Streamlit | Local development | Streamlit Cloud (future) |
-
-## 📝 Deployment Checklist
-
-Before copying changes to production:
-
-1. ✅ Test complete workflow: `./run_analysis.sh`
-2. ✅ Verify all CSV files generated correctly
-3. ✅ Check Streamlit dashboard displays data
-4. ✅ Review summary statistics output
-5. ✅ Copy updated scripts to `prod/daily_fin/`
+### Clear Streamlit Cache
+If data isn't updating in the deployed app:
+1. Go to the app → hamburger menu (top right) → "Clear cache"
+2. Or reboot from Streamlit Cloud dashboard
 
 ---
 
-**Development Environment**  
-**Last Updated:** 2025-12-08
+**Last Updated:** 2025-12-17
