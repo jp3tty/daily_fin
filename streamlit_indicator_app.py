@@ -11,7 +11,7 @@ merged_df = create_merged_df(df_mom, df_eng)
 st.title('📈 Candlestick Pattern Analysis')
 
 st.header("Selected Ticker Table")
-st.caption("Daily candlestick patterns for stocks with small market cap, relative volume > 2x, and 5-day performance > 5%. n\
+st.caption("Daily candlestick patterns for stocks with small market cap, relative volume > 2x, and 5-day performance > 5%.\
     Select a ticker from the table to view the candlestick chart. This table is updated daily after the market closes.")
 
 gb = GridOptionsBuilder.from_dataframe(merged_df)
