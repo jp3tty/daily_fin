@@ -147,7 +147,7 @@ Stocks are selected via FinViz screener with these filters:
 Scrapes FinViz for stocks matching the screening criteria.
 
 ### `pull_stock_candles.py`
-Downloads 90 days of OHLCV data from yfinance for all screened tickers (plus monitored tickers: INTC, SB, AMAT, AAPL, ALMS, FSMD, HOPE).
+Downloads 90 days of OHLCV data from yfinance for all screened tickers (plus monitored tickers: FSMD, AMAT, AAPL).
 
 ### `engulfing_indicator.py`
 Detects bullish and bearish engulfing candlestick patterns.
