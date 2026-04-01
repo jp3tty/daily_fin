@@ -22,8 +22,7 @@ dist/
 *.xls
 *.numbers
 
-# Streamlit
-.streamlit/
+# Streamlit (commit `.streamlit/config.toml` for Cloud; never commit secrets)
 .streamlit/secrets.toml
 
 # Environment variables

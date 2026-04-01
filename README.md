@@ -36,6 +36,17 @@ python momentum_indicator.py
 streamlit run streamlit_indicator_app.py
 ```
 
+### Deploy on Streamlit Community Cloud
+
+1. Sign in at [share.streamlit.io](https://share.streamlit.io) with GitHub.
+2. Click **Create app** and choose this repository and branch **`main`**.
+3. Set **Main file path** to **`streamlit_indicator_app.py`** (not `streamlit run …`, just the path).
+4. Open **Advanced settings** and select **Python 3.12** (recommended for this stack).
+5. Leave **Secrets** empty unless you add your own keys later; the dashboard reads public CSVs from GitHub raw URLs (`data/loaders.py`).
+6. Deploy. Pushes to the connected branch trigger a rebuild automatically.
+
+If the AgGrid table fails to load, open **Manage app → Logs** on Community Cloud and confirm `streamlit-aggrid` installed cleanly from `requirements.txt`.
+
 ## 📦 Installation
 
 ```bash

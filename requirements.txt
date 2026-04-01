@@ -11,8 +11,8 @@ numpy>=1.26.0
 # Financial data dependencies
 yfinance>=0.2.40
 
-# Streamlit dashboard dependencies
-streamlit>=1.29.0
-streamlit-aggrid>=0.3.4
+# Streamlit dashboard dependencies (pin aggrid 1.x for Community Cloud component stability)
+streamlit>=1.40.0
+streamlit-aggrid>=1.2.0
 plotly>=5.18.0
 nbformat>=4.2.0

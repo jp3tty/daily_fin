@@ -1,0 +1,5 @@
+# Streamlit Community Cloud and local runs — safe to commit (no secrets here).
+# https://docs.streamlit.io/develop/concepts/configuration/options
+
+[browser]
+gatherUsageStats = false
