@@ -43,6 +43,7 @@ grid_response = AgGrid(
     fit_columns_on_grid_load=True,
     height=400,
     key="ticker_grid",
+    use_json_serialization=True,
 )
 
 # CHART SECTION
