@@ -1,7 +1,7 @@
 Ticker,Latest_Close,RSI,Momentum,Momentum_Strength_Pct,SMA_20,SMA_50,Current_Trend,Signal_Strength,Bullish_Days_30d,Bearish_Days_30d,Strong_Bullish_Days_30d,Strong_Bearish_Days_30d,Market Cap,P/E,Forward P/E,PEG,P/S,P/B,P/C,P/FCF,EPS This Y,EPS Next Y,EPS Past 5Y,EPS Next 5Y,Sales Past 5Y,Price,Change %,Volume,Scraped_At
 AALTI,,,,,,,Neutral,Normal,0,0,0,0,402.33M,-,6.45,-,1.45,1.17,12.9,327.10,110.57%,207.69%,-472.06%,-,-,2.58,11.69%,595862.0,2026-10-16 23:45:21
-AAPL,,,,,,,Neutral,Normal,0,0,0,0,,,,,,,,,,,,,,,,,
 CCRGY,,,,,,,Neutral,Normal,0,0,0,0,5.65B,-,5.55,0.64,1.31,0.88,20.91,6.78,37.94%,-0.10%,-,8.70%,36.54%,13.77,10.07%,22794860.0,2026-10-16 23:45:21
 KKPLT,,,,,,,Neutral,Normal,0,0,0,0,544.73M,4.30,-,-,1.81,-,22.61,-,-,-,66.17%,27.67%,-,6.42,11.07%,340184.0,2026-10-16 23:45:21
-AMAT,374.5299987792969,27.280552942822226,-38.579986572265625,-10.300906922812356,434.04350128173826,455.3036016845703,Bearish,Strong_Bearish,0,6,10,15,,,,,,,,,,,,,,,,,
-FSMD,50.349998474121094,54.42764311908691,1.0099983215332031,2.0059550191492503,49.96899967193603,50.22549003601074,Neutral,Normal,0,2,0,3,,,,,,,,,,,,,,,,,
+AAPL,,39.25531963246471,,,,,Neutral,Normal,11,0,6,0,,,,,,,,,,,,,,,,,
+AMAT,,35.904801755597106,,,,,Neutral,Normal,0,7,10,16,,,,,,,,,,,,,,,,,
+FSMD,,59.25922188224086,,,,,Neutral,Normal,0,2,0,3,,,,,,,,,,,,,,,,,
